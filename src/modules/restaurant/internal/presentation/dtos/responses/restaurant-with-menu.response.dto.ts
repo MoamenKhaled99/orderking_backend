@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   GetRestaurantByIdResponse,
   MenuItemEntry,
-} from '../../../../application/queries/get-restaurant-by-id/get-restaurant-by-id.response';
+} from '../../../application/queries/get-restaurant-by-id/get-restaurant-by-id.response';
 
 export class MenuItemResponseDto {
   @ApiProperty() id: string;
