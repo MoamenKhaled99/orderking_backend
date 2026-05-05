@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+  address     String
+  category    String
+  createdAt   DateTime   @default(now())
+  menuItems   MenuItem[]
+  orders      Order[]
+
+  @@map("restaurants")
+}
+
+model MenuItem {
+  id           String      @id @default(uuid())
+  restaurantId String
+  name         String
+  description  String?
+  price        Decimal     @db.Decimal(10, 2)
+  category     String
+  imageUrl     String?
+  isAvailable  Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  orderItems   OrderItem[]
+
+  @@map("menu_items")
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  restaurantId    String
+  userId          String
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+  totalAmount     Decimal       @db.Decimal(10, 2)
+  deliveryAddress String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  menuItemId String
+  quantity   Int
+  unitPrice  Decimal  @db.Decimal(10, 2)
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
