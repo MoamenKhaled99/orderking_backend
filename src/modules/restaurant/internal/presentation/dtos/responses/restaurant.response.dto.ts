@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { RestaurantItem } from '../../../../application/queries/get-all-restaurants/get-all-restaurants.response';
+import { RestaurantItem } from '../../../application/queries/get-all-restaurants/get-all-restaurants.response';
 
 export class RestaurantResponseDto {
   @ApiProperty() id: string;

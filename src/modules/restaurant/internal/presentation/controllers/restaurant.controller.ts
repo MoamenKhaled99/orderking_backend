@@ -1,11 +1,12 @@
 import { Controller, Get, Param, HttpCode, HttpStatus, Inject } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
-import { IGetAllRestaurantsHandler } from '../../../application/queries/get-all-restaurants/get-all-restaurants.handler';
-import { IGetRestaurantByIdHandler } from '../../../application/queries/get-restaurant-by-id/get-restaurant-by-id.handler';
-import { GetAllRestaurantsQuery } from '../../../application/queries/get-all-restaurants/get-all-restaurants.query';
-import { GetRestaurantByIdQuery } from '../../../application/queries/get-restaurant-by-id/get-restaurant-by-id.query';
+import { IGetAllRestaurantsHandler } from '../../application/queries/get-all-restaurants/get-all-restaurants.handler';
+import { IGetRestaurantByIdHandler } from '../../application/queries/get-restaurant-by-id/get-restaurant-by-id.handler';
+import { GetAllRestaurantsQuery } from '../../application/queries/get-all-restaurants/get-all-restaurants.query';
+import { GetRestaurantByIdQuery } from '../../application/queries/get-restaurant-by-id/get-restaurant-by-id.query';
 import { RestaurantResponseDto } from '../dtos/responses/restaurant.response.dto';
 import { RestaurantWithMenuResponseDto } from '../dtos/responses/restaurant-with-menu.response.dto';
+
 
 @ApiTags('Restaurants')
 @Controller('restaurants')
