@@ -47,6 +47,7 @@ export class GetRestaurantByIdHandler implements IGetRestaurantByIdHandler {
       restaurant.address,
       restaurant.category,
       restaurant.createdAt,
+      restaurant.deliveryFee.toString(),
       menuItems,
     );
   }

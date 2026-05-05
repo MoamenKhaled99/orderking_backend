@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AuthModule } from '../../auth/shared/auth.module';
 import { IRestaurantRepository } from '../internal/domain/repositories/restaurant.repo.interface';
 import { RestaurantRepository } from '../internal/infrastructure/database/repositories/restaurant.repository';
 import {
@@ -12,6 +13,7 @@ import {
 import { RestaurantController } from '../internal/presentation/controllers/restaurant.controller';
 
 @Module({
+  imports: [AuthModule],
   providers: [
     { provide: IRestaurantRepository, useClass: RestaurantRepository },
     { provide: IGetAllRestaurantsHandler, useClass: GetAllRestaurantsHandler },

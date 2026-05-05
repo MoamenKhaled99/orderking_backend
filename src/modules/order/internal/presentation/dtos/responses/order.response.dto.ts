@@ -22,6 +22,7 @@ export class OrderResponseDto {
   @ApiProperty() userId: string;
   @ApiProperty() status: string;
   @ApiProperty() paymentStatus: string;
+  @ApiProperty() paymentMethod: string;
   @ApiProperty() totalAmount: string;
   @ApiProperty() deliveryAddress: string;
   @ApiProperty() createdAt: Date;
@@ -34,6 +35,7 @@ export class OrderResponseDto {
     this.userId = data.userId;
     this.status = data.status;
     this.paymentStatus = data.paymentStatus;
+    this.paymentMethod = data.paymentMethod;
     this.totalAmount = data.totalAmount.toString();
     this.deliveryAddress = data.deliveryAddress;
     this.createdAt = data.createdAt;

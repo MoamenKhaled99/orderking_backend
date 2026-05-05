@@ -8,6 +8,7 @@ export class RestaurantResponseDto {
   @ApiPropertyOptional({ nullable: true }) imageUrl: string | null;
   @ApiProperty() address: string;
   @ApiProperty() category: string;
+  @ApiProperty() deliveryFee: string;
   @ApiProperty() createdAt: Date;
 
   constructor(data: RestaurantItem) {
@@ -17,6 +18,7 @@ export class RestaurantResponseDto {
     this.imageUrl = data.imageUrl;
     this.address = data.address;
     this.category = data.category;
+    this.deliveryFee = data.deliveryFee;
     this.createdAt = data.createdAt;
   }
 }

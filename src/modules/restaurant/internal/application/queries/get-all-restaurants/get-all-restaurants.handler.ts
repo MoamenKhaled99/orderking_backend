@@ -30,6 +30,7 @@ export class GetAllRestaurantsHandler implements IGetAllRestaurantsHandler {
           r.address,
           r.category,
           r.createdAt,
+          r.deliveryFee.toString(),
         ),
     );
 

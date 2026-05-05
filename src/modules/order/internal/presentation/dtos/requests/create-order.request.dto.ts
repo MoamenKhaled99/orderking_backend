@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsString, IsUUID, Min, MinLength, ValidateNested } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsOptional, IsString, IsUUID, Min, MinLength, ValidateNested } from 'class-validator';
 
 class OrderItemDto {
   @ApiProperty({ description: 'Menu item UUID' })
@@ -28,4 +28,13 @@ export class CreateOrderRequestDto {
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
+
+  @ApiProperty({ enum: ['CASH', 'CARD'], default: 'CASH' })
+  @IsEnum(['CASH', 'CARD'])
+  paymentMethod: 'CASH' | 'CARD' = 'CASH';
+
+  @ApiProperty({ required: false, description: 'Client-generated UUID to prevent duplicate orders' })
+  @IsOptional()
+  @IsUUID()
+  idempotencyKey?: string;
 }

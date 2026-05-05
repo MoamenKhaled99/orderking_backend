@@ -7,6 +7,7 @@ export class RestaurantItem {
     public readonly address: string,
     public readonly category: string,
     public readonly createdAt: Date,
+    public readonly deliveryFee: string,
   ) {}
 }
 

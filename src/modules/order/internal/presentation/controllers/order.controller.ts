@@ -22,6 +22,7 @@ import {
 import {
   IGetOrderStatusHandler,
 } from '../../application/queries/get-order-status/get-order-status.handler';
+import { PrismaService } from '../../../../prisma/prisma.service';
 import { CreateOrderCommand } from '../../application/commands/create-order/create-order.command';
 import { UpdateOrderStatusCommand } from '../../application/commands/update-order-status/update-order-status.command';
 import { GetOrderByIdQuery } from '../../application/queries/get-order-by-id/get-order-by-id.query';
@@ -43,7 +44,38 @@ export class OrderController {
     private readonly getOrderByIdHandler: IGetOrderByIdHandler,
     @Inject(IGetOrderStatusHandler)
     private readonly getOrderStatusHandler: IGetOrderStatusHandler,
+    private readonly prisma: PrismaService,
   ) {}
+
+  @Get('my')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get all orders for the authenticated user' })
+  async getMyOrders(@CurrentUser() user: AuthenticatedUser) {
+    const orders = await this.prisma.order.findMany({
+      where: { userId: user.userId },
+      include: {
+        items: { include: { menuItem: true } },
+        restaurant: { select: { id: true, name: true, imageUrl: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return orders.map((o) => ({
+      id: o.id,
+      status: o.status,
+      paymentStatus: o.paymentStatus,
+      paymentMethod: o.paymentMethod,
+      totalAmount: o.totalAmount.toString(),
+      deliveryAddress: o.deliveryAddress,
+      createdAt: o.createdAt,
+      restaurant: o.restaurant,
+      items: o.items.map((i) => ({
+        id: i.id,
+        quantity: i.quantity,
+        unitPrice: i.unitPrice.toString(),
+        menuItem: { id: i.menuItem.id, name: i.menuItem.name },
+      })),
+    }));
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -57,6 +89,8 @@ export class OrderController {
       dto.restaurantId,
       dto.deliveryAddress,
       dto.items,
+      dto.idempotencyKey,
+      dto.paymentMethod,
     );
     const result = await this.createOrderHandler.handle(command);
     return new OrderResponseDto(result.order);

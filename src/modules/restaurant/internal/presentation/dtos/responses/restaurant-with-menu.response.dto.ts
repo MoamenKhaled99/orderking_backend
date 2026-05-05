@@ -33,6 +33,7 @@ export class RestaurantWithMenuResponseDto {
   @ApiPropertyOptional({ nullable: true }) imageUrl: string | null;
   @ApiProperty() address: string;
   @ApiProperty() category: string;
+  @ApiProperty() deliveryFee: string;
   @ApiProperty() createdAt: Date;
   @ApiProperty({ type: [MenuItemResponseDto] }) menuItems: MenuItemResponseDto[];
 
@@ -43,6 +44,7 @@ export class RestaurantWithMenuResponseDto {
     this.imageUrl = data.imageUrl;
     this.address = data.address;
     this.category = data.category;
+    this.deliveryFee = data.deliveryFee;
     this.createdAt = data.createdAt;
     this.menuItems = data.menuItems.map((item) => new MenuItemResponseDto(item));
   }

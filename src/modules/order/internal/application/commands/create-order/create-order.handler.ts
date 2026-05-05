@@ -21,7 +21,13 @@ export class CreateOrderHandler extends CommandHandlerBase<
   }
 
   async handle(command: CreateOrderCommand): Promise<CreateOrderResponse> {
-    const { userId, restaurantId, deliveryAddress, items } = command;
+    const { userId, restaurantId, deliveryAddress, items, idempotencyKey, paymentMethod } = command;
+
+    if (idempotencyKey) {
+      const existing = await this.orderRepository.findByIdempotencyKey(idempotencyKey);
+      if (existing) return new CreateOrderResponse(existing);
+    }
+
     const menuItemIds = items.map((i) => i.menuItemId);
 
     // Step 1: Validate all menu items exist and are available
@@ -49,8 +55,10 @@ export class CreateOrderHandler extends CommandHandlerBase<
       totalAmount += unitPrice * item.quantity;
     }
 
-    // Step 4: Simulate payment (50/50 random)
-    const paymentStatus = Math.random() < 0.5 ? 'SUCCESS' : 'FAILED';
+    // Step 4: Simulate payment — cash always succeeds; card is 50/50
+    const paymentStatus = paymentMethod === 'CASH'
+      ? 'SUCCESS'
+      : Math.random() < 0.5 ? 'SUCCESS' : 'FAILED';
 
     // Step 5: Build order items payload with prices from DB
     const orderItemsData = items.map((item) => ({
@@ -64,8 +72,10 @@ export class CreateOrderHandler extends CommandHandlerBase<
       restaurantId,
       userId,
       paymentStatus,
+      paymentMethod,
       totalAmount: totalAmount.toFixed(2),
       deliveryAddress,
+      idempotencyKey,
       items: orderItemsData,
     });
 

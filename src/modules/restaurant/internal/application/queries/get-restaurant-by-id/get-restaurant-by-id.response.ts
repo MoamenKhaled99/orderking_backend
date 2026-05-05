@@ -22,8 +22,9 @@ export class GetRestaurantByIdResponse extends RestaurantItem {
     address: string,
     category: string,
     createdAt: Date,
+    deliveryFee: string,
     public readonly menuItems: MenuItemEntry[],
   ) {
-    super(id, name, description, imageUrl, address, category, createdAt);
+    super(id, name, description, imageUrl, address, category, createdAt, deliveryFee);
   }
 }

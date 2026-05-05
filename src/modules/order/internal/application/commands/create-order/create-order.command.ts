@@ -6,5 +6,7 @@ export class CreateOrderCommand implements ICommand {
     public readonly restaurantId: string,
     public readonly deliveryAddress: string,
     public readonly items: Array<{ menuItemId: string; quantity: number }>,
+    public readonly idempotencyKey?: string,
+    public readonly paymentMethod: 'CASH' | 'CARD' = 'CASH',
   ) {}
 }
