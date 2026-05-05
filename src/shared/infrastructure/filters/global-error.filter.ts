@@ -1,10 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpStatus,
-  HttpException,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common';
 import type { Response } from 'express';
 import { BadRequestError } from '../../application/errors/bad-request.error';
 import { NotFoundError } from '../../application/errors/not-found.error';
